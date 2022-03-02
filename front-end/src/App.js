@@ -19,6 +19,8 @@ import './App.css';
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
+const MONGO_URI = process.env.REACT_APP_MONGO_URI; // this isn't used. this wont be used.
+
 const storiesReducer = (state, action) => {
 	switch (action.type) {
 		case 'STORIES_FETCH_INIT':
@@ -45,6 +47,11 @@ const storiesReducer = (state, action) => {
 				...state,
 				data: state.data.filter((story) => action.payload.objectID !== story.objectID),
 			};
+		// case 'REMOVE_TASK':
+		// 	return {
+		// 		...state,
+		// 		data: state.data.filter((task) => action.payload.objectID !== task.objectID),
+		// 	};
 		default:
 			throw new Error();
 	}
@@ -92,12 +99,18 @@ const dummyData = {
 };
 
 function App() {
-	console.log(API_ENDPOINT);
+	// console.log('API_ENDPOINT: ', API_ENDPOINT);
+	const [ atad, setData ] = React.useState(null);
+
+	// I've got the wrong endpoint here.
+	React.useEffect(() => {
+		fetch('/index.html').then((res) => res.json()).then((atad) => setData(atad.message));
+	}, []);
 
 	// const [ searchTerm, setSearchTerm ] = useSemiPersistentState('search', 'React');
 	const searchTerm = 'search';
 
-	const [ stories, dispatchStories ] = React.useReducer(storiesReducer, {
+	const [ tasks, dispatchStories ] = React.useReducer(storiesReducer, {
 		data: [],
 		isLoading: false,
 		// isLoading: true, // want this to remain false.
@@ -133,15 +146,15 @@ function App() {
 		[ handleFetchStories ],
 	); // D
 
-	console.log('list:', stories.data);
+	// console.log('list:', tasks.data);
+	console.log('atad:', atad);
 	return (
 		<div className="App">
 			<h1>Task Manager</h1>
 			<SubmitForm />
-			{stories.isError && <p>Something went wrong ...</p>}
-			{stories.isLoading ? <p>Loading ...</p> : <PlaceHolderList />}
-			{/* {stories.isLoading ? <p>Loading ...</p> : <List list={stories.data} />} */}
-			{/* <List /> */}
+			<p>{!atad ? 'Loading data from atad...' : atad}</p>
+			{tasks.isError && <p>Something went wrong ...</p>}
+			{tasks.isLoading ? <p>Loading ...</p> : <List list={tasks.data} />}
 		</div>
 	);
 }
@@ -156,37 +169,43 @@ function SubmitForm() {
 	);
 }
 
-function List() {
-	// console.log(dummyData.tasks);
-	// console.log(dummyData.tasks[0]);
+// const List = ({ list, onRemoveItem }) => (
+// 	<ul>{list.map((item) => <Item key={item.objectID} item={item} onRemoveItem={onRemoveItem} />)}</ul>
+// );
 
-	const listItems = dummyData.tasks.map((item) => (
-		<li key={item._id}>
-			<p>Name: {item.name}</p>
-			<ul>
-				<p>ID: {item._id}</p>
-			</ul>
-			<p>button to edit</p>
-			<p>toggle button to delete item</p>
-		</li>
-	));
+const List = ({ list }) => (
+	<ul>{list.map((item) => <Item key={item.objectID} item={item} />)}</ul>
 
+	// // console.log(dummyData.tasks);
+	// // console.log(dummyData.tasks[0]);
+	// const listItems = dummyData.tasks.map((item) => (
+	// 	<li key={item._id}>
+	// 		<p>Name: {item.name}</p>
+	// 		<ul>
+	// 			<p>ID: {item._id}</p>
+	// 		</ul>
+	// 		<p>button to edit</p>
+	// 		<p>toggle button to delete item</p>
+	// 	</li>
+	// ));
+	// return (
+	// 	<div>
+	// 		<h2>My List</h2>
+	// 		{/* loop through the array */}
+	// 		{/* then create a component for each array item and pass each item to that component.*/}
+	// 		<ul>{listItems}</ul>
+	// 	</div>
+	// );
+);
+
+const Item = ({ item }) => {
+	// console.log(item);
 	return (
-		<div>
-			<h2>My List</h2>
-			{/* loop through the array */}
-			{/* then create a component for each array item and pass each item to that component.*/}
-			<ul>{listItems}</ul>
-		</div>
+		<li>
+			<p>Author: {item.author} .</p>
+			<p>Title: {item.title} .</p>
+		</li>
 	);
-}
-
-function PlaceHolderList() {
-	return <p>PlaceHolderList</p>;
-}
-
-function Item() {
-	return <p>One item.</p>;
-}
+};
 
 export default App;
