@@ -1,15 +1,23 @@
 // import logo from './logo.svg';
 import './App.css';
 
+// *** NEXT STEPS ***
+
+// 1. Load data from database.
+//    See text book:
+//    https://github.com/JamieBort/LearningDirectory/tree/master/JavaScript/Libraries/React/RoadToReact/hacker-stories02
+
+// 2. Create a submit form
+
+// 3. Have the front end and back end speak to each other.
+//    Specifically, have the submit form "push" to the back end.
+
+// 4. Create a delete button component.
+
+// 5. Create an edit button component.
+
 // const MY_TOKEN = process.env.REACT_APP_TOKEN;
 // const MY_SECRET = process.env.REACT_APP_SECRET;
-
-// Next steps
-// load data from database. see text book.
-// Create a submit form
-// have the front end and back end speak to each other. Specifically, have the submit form "push" to the back end.
-// create a delete button component
-// create an edit button component
 
 const dummyData = {
 	tasks: [
