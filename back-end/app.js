@@ -18,7 +18,7 @@ app.use(express.json());
 app.use('/api/v1/tasks', tasks);
 
 // const port = 3000; // original port
-const port = 5000; // using this one temporarily since the front end is using port 3000
+const port = 4000; // using this one temporarily since the front end is using port 3000
 
 const start = async () => {
 	try {
